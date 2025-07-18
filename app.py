@@ -1,6 +1,5 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect, send_file
 from flask_sqlalchemy import SQLAlchemy
-from flask import send_file
 import pandas as pd
 import io
 
@@ -8,7 +7,7 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///autores.db'
 db = SQLAlchemy(app)
 
-# Definición del modelo Autor
+# Modelo Autor
 class Autor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     documento = db.Column(db.String(100))
@@ -26,6 +25,11 @@ class Autor(db.Model):
     centro_universitario = db.Column(db.String(100))
     facultad = db.Column(db.String(100))
     programa = db.Column(db.String(100))
+
+# Redirección automática a /registro
+@app.route("/")
+def index():
+    return redirect("/registro")
 
 @app.route("/registro", methods=["GET", "POST"])
 def registro_autor():
@@ -66,30 +70,26 @@ def ver_autores():
 def descargar_excel():
     autores = Autor.query.all()
 
-    # Convertir a lista de diccionarios
-    datos = []
-    for a in autores:
-        datos.append({
-            "Documento": a.documento,
-            "Nombre autor": a.nombre_autor,
-            "Pseudónimo": a.seudonimo,
-            "Sexo": a.sexo,
-            "Perfil": a.perfil,
-            "Nacionalidad": a.nacionalidad,
-            "Correo": a.correo,
-            "Nivel de formación": a.nivel_formacion,
-            "Filiación": a.filiacion,
-            "País filiación": a.pais_filiacion,
-            "¿Es investigador?": a.es_investigador,
-            "Rectoría": a.rectoria,
-            "Centro universitario": a.centro_universitario,
-            "Facultad": a.facultad,
-            "Programa académico": a.programa
-        })
+    datos = [{
+        "Documento": a.documento,
+        "Nombre autor": a.nombre_autor,
+        "Pseudónimo": a.seudonimo,
+        "Sexo": a.sexo,
+        "Perfil": a.perfil,
+        "Nacionalidad": a.nacionalidad,
+        "Correo": a.correo,
+        "Nivel de formación": a.nivel_formacion,
+        "Filiación": a.filiacion,
+        "País filiación": a.pais_filiacion,
+        "¿Es investigador?": a.es_investigador,
+        "Rectoría": a.rectoria,
+        "Centro universitario": a.centro_universitario,
+        "Facultad": a.facultad,
+        "Programa académico": a.programa
+    } for a in autores]
 
     df = pd.DataFrame(datos)
 
-    # Guardar en memoria y enviar como descarga
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name="Autores")
