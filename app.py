@@ -101,5 +101,9 @@ def descargar_excel():
                      as_attachment=True,
                      mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
+@app.before_first_request
+def crear_tabla():
+    db.create_all()
+
 if __name__ == "__main__":
     app.run(debug=True)
