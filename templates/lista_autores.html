@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Autores</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <p><a href="{{ url_for('descargar_excel') }}">📥 Descargar en Excel</a></p>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Autores Registrados</h1>
+        <table border="1" cellpadding="8" cellspacing="0" style="width:100%; border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th>Documento</th>
+                    <th>Nombre</th>
+                    <th>Seudónimo</th>
+                    <th>Correo</th>
+                    <th>Programa</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for autor in autores %}
+                <tr>
+                    <td>{{ autor.documento }}</td>
+                    <td>{{ autor.nombre_autor }}</td>
+                    <td>{{ autor.seudonimo }}</td>
+                    <td>{{ autor.correo }}</td>
+                    <td>{{ autor.programa }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

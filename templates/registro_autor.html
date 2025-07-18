@@ -1,0 +1,42 @@
+<!-- templates/registro_autor.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Formulario de Registro</h1>
+    <form action="/registro" method="POST">
+        <label>Documento: <input type="text" name="documento" required></label><br>
+        <label>Nombre autor: <input type="text" name="nombre_autor" required></label><br>
+        <label>Pseudónimo: <input type="text" name="seudonimo"></label><br>
+        <label>Sexo:
+            <select name="sexo">
+                <option value="Masculino">Masculino</option>
+                <option value="Femenino">Femenino</option>
+                <option value="Otro">Otro</option>
+            </select>
+        </label><br>
+        <label>Perfil: <input type="text" name="perfil"></label><br>
+        <label>Nacionalidad: <input type="text" name="nacionalidad"></label><br>
+        <label>Correo: <input type="email" name="correo" required></label><br>
+        <label>Nivel de formación: <input type="text" name="nivel_formacion"></label><br>
+        <label>Filiación: <input type="text" name="filiacion"></label><br>
+        <label>País filiación: <input type="text" name="pais_filiacion"></label><br>
+        <label>¿Es investigador?:
+            <select name="es_investigador">
+                <option value="Sí">Sí</option>
+                <option value="No">No</option>
+            </select>
+        </label><br>
+        <label>Rectoría: <input type="text" name="rectoria"></label><br>
+        <label>Centro universitario: <input type="text" name="centro_universitario"></label><br>
+        <label>Escuela / facultad: <input type="text" name="facultad"></label><br>
+        <label>Programa académico: <input type="text" name="programa"></label><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
