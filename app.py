@@ -4,7 +4,7 @@ import pandas as pd
 import io
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:FormAutores2025%21@db.wjzabbdnwmsydegvwrep.supabase.co:5432/postgres'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:FormAutores2025!@aws-0-us-east-2.pooler.supabase.com:5432/postgres?sslmode=require'
 db = SQLAlchemy(app)
 
 # Modelo Autor
