@@ -26,6 +26,10 @@ class Autor(db.Model):
     facultad = db.Column(db.String(100))
     programa = db.Column(db.String(100))
 
+# Crear tabla automáticamente en Render
+with app.app_context():
+    db.create_all()
+
 # Redirección automática a /registro
 @app.route("/")
 def index():
@@ -100,10 +104,6 @@ def descargar_excel():
                      download_name="Autores_Registrados.xlsx",
                      as_attachment=True,
                      mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-
-@app.before_first_request
-def crear_tabla():
-    db.create_all()
 
 if __name__ == "__main__":
     app.run(debug=True)
