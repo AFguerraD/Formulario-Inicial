@@ -4,7 +4,7 @@ import pandas as pd
 import io
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///autores.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:FormAutores2025!@db.wjzabbdnwmsydegvwrep.supabase.co:5432/postgres'
 db = SQLAlchemy(app)
 
 # Modelo Autor
@@ -30,7 +30,6 @@ class Autor(db.Model):
 with app.app_context():
     db.create_all()
 
-# Redirección automática a /registro
 @app.route("/")
 def index():
     return redirect("/registro")
