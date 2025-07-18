@@ -4,7 +4,7 @@ import pandas as pd
 import io
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:FormAutores2025!@aws-0-us-east-2.pooler.supabase.com:5432/postgres?sslmode=require'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres.wjzabbdnwmsydegvwrep:FormAutores2025!@aws-0-us-east-2.pooler.supabase.com:5432/postgres?sslmode=require'
 db = SQLAlchemy(app)
 
 # Modelo Autor
@@ -25,10 +25,6 @@ class Autor(db.Model):
     centro_universitario = db.Column(db.String(100))
     facultad = db.Column(db.String(100))
     programa = db.Column(db.String(100))
-
-# Crear tabla automáticamente en Render
-with app.app_context():
-    db.create_all()
 
 @app.route("/")
 def index():
@@ -99,10 +95,16 @@ def descargar_excel():
 
     output.seek(0)
 
-    return send_file(output,
-                     download_name="Autores_Registrados.xlsx",
-                     as_attachment=True,
-                     mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    return send_file(
+        output,
+        download_name="Autores_Registrados.xlsx",
+        as_attachment=True,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
+
+# Crea las tablas cuando la app se inicia
+with app.app_context():
+    db.create_all()
 
 if __name__ == "__main__":
     app.run(debug=True)
