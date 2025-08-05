@@ -15,7 +15,7 @@ class Autor(db.Model):
     seudonimo = db.Column(db.String(100))
     sexo = db.Column(db.String(20))
     perfil = db.Column(db.String(100))
-    rol_obra = db.Colum(db.String(100))
+    rol_obra = db.Column    (db.String(100))
     nacionalidad = db.Column(db.String(100))
     correo = db.Column(db.String(100))
     nivel_formacion = db.Column(db.String(100))
