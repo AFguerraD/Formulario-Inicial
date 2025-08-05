@@ -29,12 +29,12 @@ class Autor(db.Model):
 
 # Diccionario de opciones para el formulario
 opciones = {
-    "sexos": ["Masculino", "Femenino"],
+    "sexos": ["-Seleccione-","Masculino", "Femenino"],
     "perfiles_institucionales": [
         "Colaborador","Docente","Docente con encargo administrativo", "Estudiante", "Egresado", "Otro"
     ],
     "nacionalidades": [
-        "Afganistán","Albania"	,"Alemania"	,"Andorra","Angola","Antigua y Barbuda","Arabia Saudita","Argelia","Argentina","Armenia",
+        "-Seleccione-","Afganistán","Albania"	,"Alemania"	,"Andorra","Angola","Antigua y Barbuda","Arabia Saudita","Argelia","Argentina","Armenia",
         "Australia","Austria","Azerbaiyán","Bahamas","Bangladés","Barbados","Baréin","Bélgica","Belice","Benín","Bielorrusia",
         "Birmania (Myanmar)","Bolivia","Bosnia y Herzegovina","Botsuana","Brasil","Brunéi","Bulgaria","Burkina Faso","Burundi","Bután",
         "Cabo Verde","Camboya","Camerún","Canadá","Catar","Chad","Chile","China","Chipre","Colombia","Comoras","Corea del Norte","Corea del Sur",
@@ -52,20 +52,20 @@ opciones = {
         "Trinidad y Tobago","Túnez","Turkmenistán","Turquía","Tuvalu","Ucrania","Uganda","Uruguay","Uzbekistán","Vanuatu","Venezuela","Vietnam","Yemen","Yibuti","Zambia","Zimbabue","Palestina","Ciudad del Vaticano (Santa Sede)"	
     ],
     "niveles_formacion": [
-        "Técnico", "Tecnólogo", "Pregrado",
+        "-Seleccione-","Técnico", "Tecnólogo", "Pregrado",
         "Especialización", "Maestría", "Doctorado"
     ],
-    "es_investigador": ["Sí", "No"],
+    "es_investigador": ["-Seleccione-","Sí", "No"],
     "rectorias": [
-        "Rectoría Bogotá", "Rectoría Medellín", "Rectoría Cali",
+        "-Seleccione-","Rectoría Bogotá", "Rectoría Medellín", "Rectoría Cali",
         "Rectoría Bucaramanga", "Otra"
     ],
     "facultades": [
-        "Ingeniería", "Ciencias Sociales", "Educación",
+        "-Seleccione-","Ingeniería", "Ciencias Sociales", "Educación",
         "Ciencias Económicas", "Ciencias de la Salud", "Otra"
     ],
     "rol_obra": [
-        "Autor","Editor","Compialdor","Prologuista","Traductor"
+        "-Seleccione-","Autor","Editor","Compialdor","Prologuista","Traductor"
     ]
 }
 
