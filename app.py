@@ -99,13 +99,29 @@ opciones = {
         "Uzbekistán", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Yibuti", "Zambia", "Zimbabue", "Palestina",
         "Ciudad del Vaticano (Santa Sede)"],
     "centros_por_rectoria": {
-        "Antioquia - Chocó": ["Apartadó", "Bello", "Itagüí", "Urabá"],
-        "Bogotá Cundinamarca - Boyacá": ["Kennedy", "Soacha", "Chiquinquirá", "Madrid"],
-        "Caribe": ["Barranquilla", "Cartagena", "Santa Marta"],
-        "Centro Occidente": ["Cali", "Pereira", "Pasto"],
-        "Centro Sur": ["Neiva", "Ibagué", "Florencia"],
-        "Oriente": ["Bucaramanga", "Cúcuta", "Villavicencio"],
+        "Antioquia - Chocó": 
+        ["Apartadó","Bello","Centro  de Atención Tutorial Caucasia","Centro de Atención Tutorial El Bagre","Centro de Atención Tutorial Quibdó",
+        "Centro de Atención Tutorial Rionegro","Centro de Atención Tutorial Zaragoza","Itagüí","Urabá"],
+
+        "Bogotá Cundinamarca - Boyacá": 
+        ["Kennedy","Las Cruces - Santa Fe""Minuto de Dios - Engativá","Perdomo - Ciudad Bolívar""San Cristóbal Norte - Usaquén","Centro de Atención Tutorial Facatativá",
+        "Centro de Atención Tutorial Funza","Centro de Atención Tutorial Fusagasugá","Centro de Atención Tutorial La Mesa","Centro de Atención Tutorial Ubaté","Centro de Atención Tutorial Villeta",
+        "Chiquinquirá","Duitama","Girardot","Madrid","Soacha","Zipaquirá"],
+
+        "Caribe": 
+        ["Barranquilla","Cartagena","Centro de Atención Tutorial Magangué","Santa Marta"],
+
+        "Centro Occidente": 
+        ["Buenaventura","Buga","Cali","Centro de Atención Tutorial Armenia","Centro de Atención Tutorial Cartago","Centro de Atención Tutorial Ipiales",
+        "Centro de Atención Tutorial Miranda","Chinchiná","Pasto","Pereira"],
+
+        "Centro Sur": ["Florencia","Garzón","Ibagué","La Dorada","Lérida","Mocoa","Neiva","Pitalito"],
+
+        "Oriente": ["Barrancabermeja","Bucaramanga","Centro de Atención Tutorial Orocué","Centro de Atención Tutorial Puerto Carreño",
+        "Cúcuta","Inírida","Mitú","Ocaña","Tibú","Villavicencio","Yopal"],
+
         "Parque Científico de Innovación Social (PCIS)": [],
+        
         "UNIMINUTO Virtual": ["Virtual"]
     }
 }
