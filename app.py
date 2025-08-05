@@ -15,7 +15,7 @@ class Autor(db.Model):
     seudonimo = db.Column(db.String(100))
     sexo = db.Column(db.String(20))
     perfil = db.Column(db.String(100))
-    rol_obra = db.Column    (db.String(100))
+    rol_obra = db.Column(db.String(100))
     nacionalidad = db.Column(db.String(100))
     correo = db.Column(db.String(100))
     nivel_formacion = db.Column(db.String(100))
@@ -29,10 +29,9 @@ class Autor(db.Model):
 
 # Diccionario de opciones para el formulario
 opciones = {
-    "sexos": ["Masculino", "Femenino", "Otro"],
+    "sexos": ["Masculino", "Femenino"],
     "perfiles_institucionales": [
-        "Docente", "Estudiante", "Egresado",
-        "Docente con encargo administrativo", "Otro"
+        "Colaborador","Docente","Docente con encargo administrativo", "Estudiante", "Egresado", "Otro"
     ],
     "nacionalidades": [
         "Afganistán","Albania"	,"Alemania"	,"Andorra","Angola","Antigua y Barbuda","Arabia Saudita","Argelia","Argentina","Armenia",
