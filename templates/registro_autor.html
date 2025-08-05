@@ -25,7 +25,12 @@
                 {% endfor %}
             </select>
         </label><br>
-
+        <label>rol_obra</label>
+            <select name="rol_obra">
+                {% for rol_obra in opciones.rol_obra %}
+                    <option value="{{ rol_obra }}">{{ rol_obra }}</option>
+                {% endfor %}
+            </select>
         <label>Nacionalidad:
             <select name="nacionalidad">
                 {% for pais in opciones.nacionalidades %}

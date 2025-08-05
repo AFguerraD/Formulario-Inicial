@@ -15,6 +15,7 @@ class Autor(db.Model):
     seudonimo = db.Column(db.String(100))
     sexo = db.Column(db.String(20))
     perfil = db.Column(db.String(100))
+    rol_obra = db.Colum(db.String(100))
     nacionalidad = db.Column(db.String(100))
     correo = db.Column(db.String(100))
     nivel_formacion = db.Column(db.String(100))
@@ -63,6 +64,9 @@ opciones = {
     "facultades": [
         "Ingeniería", "Ciencias Sociales", "Educación",
         "Ciencias Económicas", "Ciencias de la Salud", "Otra"
+    ],
+    "rol_obra": [
+        "Autor","Editor","Compialdor","Prologuista","Traductor"
     ]
 }
 
@@ -87,6 +91,7 @@ def registro_autor():
             seudonimo=datos.get("seudonimo"),
             sexo=datos.get("sexo"),
             perfil=datos.get("perfil"),
+            rol_obra=datos.get("rol_obra"),
             nacionalidad=datos.get("nacionalidad"),
             correo=datos.get("correo"),
             nivel_formacion=datos.get("nivel_formacion"),
@@ -123,6 +128,7 @@ def descargar_excel():
         "Pseudónimo": a.seudonimo,
         "Sexo": a.sexo,
         "Perfil": a.perfil,
+        "Rol_obra": a.rol_obra,
         "Nacionalidad": a.nacionalidad,
         "Correo": a.correo,
         "Nivel de formación": a.nivel_formacion,
