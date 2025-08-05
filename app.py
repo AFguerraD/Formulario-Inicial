@@ -4,7 +4,7 @@ import pandas as pd
 import io
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres.wjzabbdnwmsydegvwrep:FormAutores2025!@aws-0-us-east-2.pooler.supabase.com:5432/postgres?sslmode=require'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:FormAutores2025!@aws-0-us-east-2.pooler.supabase.com:5432/postgres?sslmode=require'
 db = SQLAlchemy(app)
 
 # Modelo Autor
@@ -26,10 +26,42 @@ class Autor(db.Model):
     facultad = db.Column(db.String(100))
     programa = db.Column(db.String(100))
 
+# Diccionario de opciones para el formulario
+opciones = {
+    "sexos": ["Masculino", "Femenino", "Otro"],
+    "perfiles_institucionales": [
+        "Docente", "Estudiante", "Egresado",
+        "Docente con encargo administrativo", "Otro"
+    ],
+    "nacionalidades": [
+        "Colombiana", "Venezolana", "Ecuatoriana", "Peruana",
+        "Brasileña", "Argentina", "Otro"
+    ],
+    "niveles_formacion": [
+        "Técnico", "Tecnólogo", "Pregrado",
+        "Especialización", "Maestría", "Doctorado"
+    ],
+    "es_investigador": ["Sí", "No"],
+    "rectorias": [
+        "Rectoría Bogotá", "Rectoría Medellín", "Rectoría Cali",
+        "Rectoría Bucaramanga", "Otra"
+    ],
+    "facultades": [
+        "Ingeniería", "Ciencias Sociales", "Educación",
+        "Ciencias Económicas", "Ciencias de la Salud", "Otra"
+    ]
+}
+
+# Crear tabla automáticamente en Render
+with app.app_context():
+    db.create_all()
+
+# Ruta principal
 @app.route("/")
 def index():
     return redirect("/registro")
 
+# Registro de autor
 @app.route("/registro", methods=["GET", "POST"])
 def registro_autor():
     if request.method == "POST":
@@ -58,13 +90,15 @@ def registro_autor():
 
         return "Formulario enviado y guardado en la base de datos ✅"
 
-    return render_template("registro_autor.html")
+    return render_template("registro_autor.html", opciones=opciones)
 
+# Ver autores
 @app.route("/autores")
 def ver_autores():
     autores = Autor.query.all()
     return render_template("lista_autores.html", autores=autores)
 
+# Descargar Excel
 @app.route("/descargar_excel")
 def descargar_excel():
     autores = Autor.query.all()
@@ -95,16 +129,10 @@ def descargar_excel():
 
     output.seek(0)
 
-    return send_file(
-        output,
-        download_name="Autores_Registrados.xlsx",
-        as_attachment=True,
-        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    )
-
-# Crea las tablas cuando la app se inicia
-with app.app_context():
-    db.create_all()
+    return send_file(output,
+                     download_name="Autores_Registrados.xlsx",
+                     as_attachment=True,
+                     mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 if __name__ == "__main__":
     app.run(debug=True)
