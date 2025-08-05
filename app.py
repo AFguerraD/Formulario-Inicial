@@ -7,12 +7,11 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres.wjzabbdnwmsydegvwrep:FormAutores2025!@aws-0-us-east-2.pooler.supabase.com:5432/postgres?sslmode=require'
 db = SQLAlchemy(app)
 
-# Modelo Autor
+# Modelo Autor sin seudonimo
 class Autor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     documento = db.Column(db.String(100))
     nombre_autor = db.Column(db.String(100))
-    seudonimo = db.Column(db.String(100))
     sexo = db.Column(db.String(20))
     perfil = db.Column(db.String(100))
     rol_obra = db.Column(db.String(100))
@@ -29,107 +28,98 @@ class Autor(db.Model):
 
 # Diccionario de opciones para el formulario
 opciones = {
-    "sexos": ["-Seleccione-","Masculino", "Femenino"],
+    "sexos": ["-Seleccione-", "Masculino", "Femenino"],
     "perfiles_institucionales": [
-        "Colaborador","Docente","Docente con encargo administrativo", "Estudiante", "Egresado", "Otro"
+        "Colaborador", "Docente", "Docente con encargo administrativo", "Estudiante", "Egresado", "Otro"
     ],
     "nacionalidades": [
-        "-Seleccione-","Afganistán","Albania"	,"Alemania"	,"Andorra","Angola","Antigua y Barbuda","Arabia Saudita","Argelia","Argentina","Armenia",
-        "Australia","Austria","Azerbaiyán","Bahamas","Bangladés","Barbados","Baréin","Bélgica","Belice","Benín","Bielorrusia",
-        "Birmania (Myanmar)","Bolivia","Bosnia y Herzegovina","Botsuana","Brasil","Brunéi","Bulgaria","Burkina Faso","Burundi","Bután",
-        "Cabo Verde","Camboya","Camerún","Canadá","Catar","Chad","Chile","China","Chipre","Colombia","Comoras","Corea del Norte","Corea del Sur",
-        "Costa de Marfil","Costa Rica","Croacia","Cuba","Dinamarca","Dominica","Ecuador","Egipto","El Salvador","Emiratos Árabes Unidos","Eritrea",
-        "Eslovaquia","Eslovenia","España","Estados Unidos","Estonia","Eswatini (Suazilandia)","Etiopía","Filipinas","Finlandia","Fiyi","Francia","Gabón",
-        "Gambia","Georgia","Ghana","Granada","Grecia","Guatemala","Guinea","Guinea-Bisáu","Guinea Ecuatorial","Guyana","Haití","Honduras","Hungría","India",
-        "Indonesia","Irak","Irán","Irlanda","Islandia","Islas Marshall","Islas Salomón","Israel","Italia","Jamaica","Japón",
-        "Jordania","Kazajistán","Kenia","Kirguistán","Kiribati","Kuwait","Laos","Lesoto","Letonia","Líbano","Liberia","Libia","Liechtenstein","Lituania",
-        "Luxemburgo","Macedonia del Norte","Madagascar","Malasia","Malaui","Maldivas","Malí","Malta","Marruecos","Mauricio","Mauritania","México","Micronesia",
-        "Moldavia","Mónaco","Mongolia","Montenegro","Mozambique","Namibia","Nauru","Nepal","Nicaragua","Níger","Nigeria","Noruega","Nueva Zelanda","Omán",
-        "Países Bajos","Pakistán","Palaos","Panamá","Papúa Nueva Guinea","Paraguay","Perú","Polonia","Portugal","Reino Unido","República Centroafricana","República Checa",
-        "República Democrática del Congo","República del Congo","República Dominicana","Ruanda","Rumanía","Rusia","Samoa","San Cristóbal y Nieves","San Marino",
-        "San Vicente y las Granadinas","Santa Lucía","Santo Tomé y Príncipe","Senegal","Serbia","Seychelles","Sierra Leona","Singapur","Siria","Somalia","Sri Lanka",
-        "Sudáfrica","Sudán","Sudán del Sur","Suecia","Suiza","Surinam","Tailandia","Tanzania","Tayikistán","Timor Oriental","Togo","Tonga",
-        "Trinidad y Tobago","Túnez","Turkmenistán","Turquía","Tuvalu","Ucrania","Uganda","Uruguay","Uzbekistán","Vanuatu","Venezuela","Vietnam","Yemen","Yibuti","Zambia","Zimbabue","Palestina","Ciudad del Vaticano (Santa Sede)"	
+        "-Seleccione-", "Afganistán", "Albania", "Alemania", "Andorra", "Angola", "Antigua y Barbuda",
+        "Arabia Saudita", "Argelia", "Argentina", "Armenia", "Australia", "Austria", "Azerbaiyán", "Bahamas",
+        "Bangladés", "Barbados", "Baréin", "Bélgica", "Belice", "Benín", "Bielorrusia", "Birmania (Myanmar)",
+        "Bolivia", "Bosnia y Herzegovina", "Botsuana", "Brasil", "Brunéi", "Bulgaria", "Burkina Faso",
+        "Burundi", "Bután", "Cabo Verde", "Camboya", "Camerún", "Canadá", "Catar", "Chad", "Chile", "China",
+        "Chipre", "Colombia", "Comoras", "Corea del Norte", "Corea del Sur", "Costa de Marfil", "Costa Rica",
+        "Croacia", "Cuba", "Dinamarca", "Dominica", "Ecuador", "Egipto", "El Salvador", "Emiratos Árabes Unidos",
+        "Eritrea", "Eslovaquia", "Eslovenia", "España", "Estados Unidos", "Estonia", "Eswatini (Suazilandia)",
+        "Etiopía", "Filipinas", "Finlandia", "Fiyi", "Francia", "Gabón", "Gambia", "Georgia", "Ghana", "Granada",
+        "Grecia", "Guatemala", "Guinea", "Guinea-Bisáu", "Guinea Ecuatorial", "Guyana", "Haití", "Honduras",
+        "Hungría", "India", "Indonesia", "Irak", "Irán", "Irlanda", "Islandia", "Islas Marshall",
+        "Islas Salomón", "Israel", "Italia", "Jamaica", "Japón", "Jordania", "Kazajistán", "Kenia",
+        "Kirguistán", "Kiribati", "Kuwait", "Laos", "Lesoto", "Letonia", "Líbano", "Liberia", "Libia",
+        "Liechtenstein", "Lituania", "Luxemburgo", "Macedonia del Norte", "Madagascar", "Malasia", "Malaui",
+        "Maldivas", "Malí", "Malta", "Marruecos", "Mauricio", "Mauritania", "México", "Micronesia", "Moldavia",
+        "Mónaco", "Mongolia", "Montenegro", "Mozambique", "Namibia", "Nauru", "Nepal", "Nicaragua", "Níger",
+        "Nigeria", "Noruega", "Nueva Zelanda", "Omán", "Países Bajos", "Pakistán", "Palaos", "Panamá",
+        "Papúa Nueva Guinea", "Paraguay", "Perú", "Polonia", "Portugal", "Reino Unido",
+        "República Centroafricana", "República Checa", "República Democrática del Congo", "República del Congo",
+        "República Dominicana", "Ruanda", "Rumanía", "Rusia", "Samoa", "San Cristóbal y Nieves", "San Marino",
+        "San Vicente y las Granadinas", "Santa Lucía", "Santo Tomé y Príncipe", "Senegal", "Serbia", "Seychelles",
+        "Sierra Leona", "Singapur", "Siria", "Somalia", "Sri Lanka", "Sudáfrica", "Sudán", "Sudán del Sur",
+        "Suecia", "Suiza", "Surinam", "Tailandia", "Tanzania", "Tayikistán", "Timor Oriental", "Togo", "Tonga",
+        "Trinidad y Tobago", "Túnez", "Turkmenistán", "Turquía", "Tuvalu", "Ucrania", "Uganda", "Uruguay",
+        "Uzbekistán", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Yibuti", "Zambia", "Zimbabue", "Palestina",
+        "Ciudad del Vaticano (Santa Sede)"
     ],
-    "niveles_formacion": [
-        "-Seleccione-","Técnico", "Tecnólogo", "Pregrado",
-        "Especialización", "Maestría", "Doctorado"
-    ],
-    "es_investigador": ["-Seleccione-","Sí", "No"],
-
+    "niveles_formacion": ["-Seleccione-", "Técnico", "Tecnólogo", "Pregrado", "Especialización", "Maestría", "Doctorado"],
+    "es_investigador": ["-Seleccione-", "Sí", "No"],
     "rectorias": [
-        "-Seleccione-","Antioquia - Chocó","Bogotá Cundinamarca - Boyacá", "Caribe", "Centro Occidente","Centro Sur","Oriente","Parque Científico de Innovación Social (PCIS)","UNIMINUTO Virtual"],
-
+        "-Seleccione-", "Antioquia - Chocó", "Bogotá Cundinamarca - Boyacá", "Caribe", "Centro Occidente", "Centro Sur",
+        "Oriente", "Parque Científico de Innovación Social (PCIS)", "UNIMINUTO Virtual"
+    ],
     "facultades": [
-        "-Seleccione-","Ingeniería", "Ciencias Sociales", "Educación",
+        "-Seleccione-", "Ingeniería", "Ciencias Sociales", "Educación",
         "Ciencias Económicas", "Ciencias de la Salud", "Otra"
     ],
+    "rol_obra": ["-Seleccione-", "Autor", "Editor", "Compilador", "Prologuista", "Traductor"],
 
-    "rol_obra": [
-        "-Seleccione-","Autor","Editor","Compialdor","Prologuista","Traductor"
-    ],
-
-    "pais_filiacion":[
-        "-Seleccione-","Afganistán","Albania"	,"Alemania"	,"Andorra","Angola","Antigua y Barbuda","Arabia Saudita","Argelia","Argentina","Armenia",
-        "Australia","Austria","Azerbaiyán","Bahamas","Bangladés","Barbados","Baréin","Bélgica","Belice","Benín","Bielorrusia",
-        "Birmania (Myanmar)","Bolivia","Bosnia y Herzegovina","Botsuana","Brasil","Brunéi","Bulgaria","Burkina Faso","Burundi","Bután",
-        "Cabo Verde","Camboya","Camerún","Canadá","Catar","Chad","Chile","China","Chipre","Colombia","Comoras","Corea del Norte","Corea del Sur",
-        "Costa de Marfil","Costa Rica","Croacia","Cuba","Dinamarca","Dominica","Ecuador","Egipto","El Salvador","Emiratos Árabes Unidos","Eritrea",
-        "Eslovaquia","Eslovenia","España","Estados Unidos","Estonia","Eswatini (Suazilandia)","Etiopía","Filipinas","Finlandia","Fiyi","Francia","Gabón",
-        "Gambia","Georgia","Ghana","Granada","Grecia","Guatemala","Guinea","Guinea-Bisáu","Guinea Ecuatorial","Guyana","Haití","Honduras","Hungría","India",
-        "Indonesia","Irak","Irán","Irlanda","Islandia","Islas Marshall","Islas Salomón","Israel","Italia","Jamaica","Japón",
-        "Jordania","Kazajistán","Kenia","Kirguistán","Kiribati","Kuwait","Laos","Lesoto","Letonia","Líbano","Liberia","Libia","Liechtenstein","Lituania",
-        "Luxemburgo","Macedonia del Norte","Madagascar","Malasia","Malaui","Maldivas","Malí","Malta","Marruecos","Mauricio","Mauritania","México","Micronesia",
-        "Moldavia","Mónaco","Mongolia","Montenegro","Mozambique","Namibia","Nauru","Nepal","Nicaragua","Níger","Nigeria","Noruega","Nueva Zelanda","Omán",
-        "Países Bajos","Pakistán","Palaos","Panamá","Papúa Nueva Guinea","Paraguay","Perú","Polonia","Portugal","Reino Unido","República Centroafricana","República Checa",
-        "República Democrática del Congo","República del Congo","República Dominicana","Ruanda","Rumanía","Rusia","Samoa","San Cristóbal y Nieves","San Marino",
-        "San Vicente y las Granadinas","Santa Lucía","Santo Tomé y Príncipe","Senegal","Serbia","Seychelles","Sierra Leona","Singapur","Siria","Somalia","Sri Lanka",
-        "Sudáfrica","Sudán","Sudán del Sur","Suecia","Suiza","Surinam","Tailandia","Tanzania","Tayikistán","Timor Oriental","Togo","Tonga",
-        "Trinidad y Tobago","Túnez","Turkmenistán","Turquía","Tuvalu","Ucrania","Uganda","Uruguay","Uzbekistán","Vanuatu","Venezuela","Vietnam","Yemen","Yibuti","Zambia","Zimbabue","Palestina","Ciudad del Vaticano (Santa Sede)"	
-    ],
-
+    "pais_filiacion": ["-Seleccione-", "Afganistán", "Albania", "Alemania", "Andorra", "Angola", "Antigua y Barbuda",
+        "Arabia Saudita", "Argelia", "Argentina", "Armenia", "Australia", "Austria", "Azerbaiyán", "Bahamas",
+        "Bangladés", "Barbados", "Baréin", "Bélgica", "Belice", "Benín", "Bielorrusia", "Birmania (Myanmar)",
+        "Bolivia", "Bosnia y Herzegovina", "Botsuana", "Brasil", "Brunéi", "Bulgaria", "Burkina Faso",
+        "Burundi", "Bután", "Cabo Verde", "Camboya", "Camerún", "Canadá", "Catar", "Chad", "Chile", "China",
+        "Chipre", "Colombia", "Comoras", "Corea del Norte", "Corea del Sur", "Costa de Marfil", "Costa Rica",
+        "Croacia", "Cuba", "Dinamarca", "Dominica", "Ecuador", "Egipto", "El Salvador", "Emiratos Árabes Unidos",
+        "Eritrea", "Eslovaquia", "Eslovenia", "España", "Estados Unidos", "Estonia", "Eswatini (Suazilandia)",
+        "Etiopía", "Filipinas", "Finlandia", "Fiyi", "Francia", "Gabón", "Gambia", "Georgia", "Ghana", "Granada",
+        "Grecia", "Guatemala", "Guinea", "Guinea-Bisáu", "Guinea Ecuatorial", "Guyana", "Haití", "Honduras",
+        "Hungría", "India", "Indonesia", "Irak", "Irán", "Irlanda", "Islandia", "Islas Marshall",
+        "Islas Salomón", "Israel", "Italia", "Jamaica", "Japón", "Jordania", "Kazajistán", "Kenia",
+        "Kirguistán", "Kiribati", "Kuwait", "Laos", "Lesoto", "Letonia", "Líbano", "Liberia", "Libia",
+        "Liechtenstein", "Lituania", "Luxemburgo", "Macedonia del Norte", "Madagascar", "Malasia", "Malaui",
+        "Maldivas", "Malí", "Malta", "Marruecos", "Mauricio", "Mauritania", "México", "Micronesia", "Moldavia",
+        "Mónaco", "Mongolia", "Montenegro", "Mozambique", "Namibia", "Nauru", "Nepal", "Nicaragua", "Níger",
+        "Nigeria", "Noruega", "Nueva Zelanda", "Omán", "Países Bajos", "Pakistán", "Palaos", "Panamá",
+        "Papúa Nueva Guinea", "Paraguay", "Perú", "Polonia", "Portugal", "Reino Unido",
+        "República Centroafricana", "República Checa", "República Democrática del Congo", "República del Congo",
+        "República Dominicana", "Ruanda", "Rumanía", "Rusia", "Samoa", "San Cristóbal y Nieves", "San Marino",
+        "San Vicente y las Granadinas", "Santa Lucía", "Santo Tomé y Príncipe", "Senegal", "Serbia", "Seychelles",
+        "Sierra Leona", "Singapur", "Siria", "Somalia", "Sri Lanka", "Sudáfrica", "Sudán", "Sudán del Sur",
+        "Suecia", "Suiza", "Surinam", "Tailandia", "Tanzania", "Tayikistán", "Timor Oriental", "Togo", "Tonga",
+        "Trinidad y Tobago", "Túnez", "Turkmenistán", "Turquía", "Tuvalu", "Ucrania", "Uganda", "Uruguay",
+        "Uzbekistán", "Vanuatu", "Venezuela", "Vietnam", "Yemen", "Yibuti", "Zambia", "Zimbabue", "Palestina",
+        "Ciudad del Vaticano (Santa Sede)"],
     "centros_por_rectoria": {
-        "Antioquia - Chocó": 
-        ["Apartadó","Bello","Centro  de Atención Tutorial Caucasia","Centro de Atención Tutorial El Bagre",
-        "Centro de Atención Tutorial Quibdó","Centro de Atención Tutorial Rionegro","Centro de Atención Tutorial Zaragoza",
-        "Itagüí","Urabá"],
-
-        "Bogotá Cundinamarca - Boyacá":
-        ["Kennedy","Las Cruces - Santa Fe","Minuto de Dios - Engativá","Perdomo - Ciudad Bolívar",
-        "San Cristóbal Norte - Usaquén","Centro de Atención Tutorial Facatativá","Centro de Atención Tutorial Funza","Centro de Atención Tutorial Fusagasugá","Centro de Atención Tutorial La Mesa",
-        "Centro de Atención Tutorial Ubaté","Centro de Atención Tutorial Villeta","Chiquinquirá","Duitama","Girardot","Madrid","Soacha","Zipaquirá"],
-
-        "Caribe": 
-        ["Barranquilla", "Cartagena", "Santa Marta","Centro de Atención Tutorial Magangué"],
-
-        "Centro Occidente":
-        [ "Buenaventura","Buga","Cali","Centro de Atención Tutorial Armenia","Centro de Atención Tutorial Cartago",
-        "Centro de Atención Tutorial Ipiales","Centro de Atención Tutorial Miranda","Chinchiná","Pasto","Pereira"],
-
-        "Centro Sur": 
-        ["Neiva", "Florencia", "Pitalito","Florencia","Garzón","Ibagué","La Dorada","Lérida","Mocoa","Neiva","Pitalito"],
-
-        "Oriente": 
-        ["Barrancabermeja","Bucaramanga","Centro de Atención Tutorial Orocué","Centro de Atención Tutorial Puerto Carreño",
-        "Cúcuta","Inírida","Mitú","Ocaña","Tibú","Villavicencio","Yopal"],
-        
+        "Antioquia - Chocó": ["Apartadó", "Bello", "Itagüí", "Urabá"],
+        "Bogotá Cundinamarca - Boyacá": ["Kennedy", "Soacha", "Chiquinquirá", "Madrid"],
+        "Caribe": ["Barranquilla", "Cartagena", "Santa Marta"],
+        "Centro Occidente": ["Cali", "Pereira", "Pasto"],
+        "Centro Sur": ["Neiva", "Ibagué", "Florencia"],
+        "Oriente": ["Bucaramanga", "Cúcuta", "Villavicencio"],
         "Parque Científico de Innovación Social (PCIS)": [],
-
-        "UNIMINUTO Virtual":
-        ["Virtual"]
+        "UNIMINUTO Virtual": ["Virtual"]
     }
 }
 
-# Crear tabla automáticamente en Render
+# Crear tabla automáticamente
 with app.app_context():
     db.create_all()
 
-# Ruta principal
+# Redirigir a /registro
 @app.route("/")
 def index():
     return redirect("/registro")
 
-# Registro de autor
+# Ruta de registro
 @app.route("/registro", methods=["GET", "POST"])
 def registro_autor():
     if request.method == "POST":
@@ -138,7 +128,6 @@ def registro_autor():
         nuevo_autor = Autor(
             documento=datos.get("documento"),
             nombre_autor=datos.get("nombre_autor"),
-            seudonimo=datos.get("seudonimo"),
             sexo=datos.get("sexo"),
             perfil=datos.get("perfil"),
             rol_obra=datos.get("rol_obra"),
@@ -161,7 +150,7 @@ def registro_autor():
 
     return render_template("registro_autor.html", opciones=opciones)
 
-# Ver autores
+# Ver todos los autores
 @app.route("/autores")
 def ver_autores():
     autores = Autor.query.all()
@@ -175,10 +164,9 @@ def descargar_excel():
     datos = [{
         "Documento": a.documento,
         "Nombre autor": a.nombre_autor,
-        "Pseudónimo": a.seudonimo,
         "Sexo": a.sexo,
         "Perfil": a.perfil,
-        "Rol_obra": a.rol_obra,
+        "Rol en la obra": a.rol_obra,
         "Nacionalidad": a.nacionalidad,
         "Correo": a.correo,
         "Nivel de formación": a.nivel_formacion,
