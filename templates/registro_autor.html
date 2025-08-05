@@ -1,4 +1,3 @@
-<!-- templates/registro_autor.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,28 +11,70 @@
         <label>Documento: <input type="text" name="documento" required></label><br>
         <label>Nombre autor: <input type="text" name="nombre_autor" required></label><br>
         <label>Pseudónimo: <input type="text" name="seudonimo"></label><br>
+
         <label>Sexo:
             <select name="sexo">
-                <option value="Masculino">Masculino</option>
-                <option value="Femenino">Femenino</option>
-                <option value="Otro">Otro</option>
+                {% for sexo in opciones.sexos %}
+                    <option value="{{ sexo }}">{{ sexo }}</option>
+                {% endfor %}
             </select>
         </label><br>
-        <label>Perfil: <input type="text" name="perfil"></label><br>
-        <label>Nacionalidad: <input type="text" name="nacionalidad"></label><br>
+
+        <label>Perfil Institucional:
+            <select name="perfil">
+                {% for perfil in opciones.perfiles_institucionales %}
+                    <option value="{{ perfil }}">{{ perfil }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+
+        <label>Nacionalidad:
+            <select name="nacionalidad">
+                {% for pais in opciones.nacionalidades %}
+                    <option value="{{ pais }}">{{ pais }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+
         <label>Correo: <input type="email" name="correo" required></label><br>
-        <label>Nivel de formación: <input type="text" name="nivel_formacion"></label><br>
+
+        <label>Nivel de formación:
+            <select name="nivel_formacion">
+                {% for nivel in opciones.niveles_formacion %}
+                    <option value="{{ nivel }}">{{ nivel }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+
         <label>Filiación: <input type="text" name="filiacion"></label><br>
         <label>País filiación: <input type="text" name="pais_filiacion"></label><br>
+
         <label>¿Es investigador?:
             <select name="es_investigador">
-                <option value="Sí">Sí</option>
-                <option value="No">No</option>
+                {% for opcion in opciones.es_investigador %}
+                    <option value="{{ opcion }}">{{ opcion }}</option>
+                {% endfor %}
             </select>
         </label><br>
-        <label>Rectoría: <input type="text" name="rectoria"></label><br>
+
+        <label>Rectoría:
+            <select name="rectoria">
+                {% for r in opciones.rectorias %}
+                    <option value="{{ r }}">{{ r }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+
         <label>Centro universitario: <input type="text" name="centro_universitario"></label><br>
-        <label>Escuela / facultad: <input type="text" name="facultad"></label><br>
+
+        <label>Escuela / facultad:
+            <select name="facultad">
+                {% for f in opciones.facultades %}
+                    <option value="{{ f }}">{{ f }}</option>
+                {% endfor %}
+            </select>
+        </label><br>
+
         <label>Programa académico: <input type="text" name="programa"></label><br>
 
         <button type="submit">Enviar</button>
