@@ -8,10 +8,8 @@
 <body>
     <h1>Formulario de Registro</h1>
     <form action="/registro" method="POST">
-        <label>Documento: <input type="text" name="documento" required></label><br>
-        <label>Nombre autor: <input type="text" name="nombre_autor" required></label><br>
-        <label>Pseudónimo: <input type="text" name="seudonimo"></label><br>
-
+        <label>Documento de identidad/NIT: <input type="text" name="documento" required></label><br>
+        <label>Nombre completo del autor: <input type="text" name="nombre_autor" required></label><br>
         <label>Sexo:
             <select name="sexo">
                 {% for sexo in opciones.sexos %}
