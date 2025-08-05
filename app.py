@@ -56,17 +56,19 @@ opciones = {
         "Especialización", "Maestría", "Doctorado"
     ],
     "es_investigador": ["-Seleccione-","Sí", "No"],
+
     "rectorias": [
-        "-Seleccione-","Rectoría Bogotá", "Rectoría Medellín", "Rectoría Cali",
-        "Rectoría Bucaramanga", "Otra"
-    ],
+        "-Seleccione-","Antioquia - Chocó","Bogotá Cundinamarca - Boyacá", "Caribe", "Centro Occidente","Centro Sur","Oriente","Parque Científico de Innovación Social (PCIS)","UNIMINUTO Virtual"],
+
     "facultades": [
         "-Seleccione-","Ingeniería", "Ciencias Sociales", "Educación",
         "Ciencias Económicas", "Ciencias de la Salud", "Otra"
     ],
+
     "rol_obra": [
         "-Seleccione-","Autor","Editor","Compialdor","Prologuista","Traductor"
     ],
+
     "pais_filiacion":[
         "-Seleccione-","Afganistán","Albania"	,"Alemania"	,"Andorra","Angola","Antigua y Barbuda","Arabia Saudita","Argelia","Argentina","Armenia",
         "Australia","Austria","Azerbaiyán","Bahamas","Bangladés","Barbados","Baréin","Bélgica","Belice","Benín","Bielorrusia",
@@ -85,6 +87,7 @@ opciones = {
         "Sudáfrica","Sudán","Sudán del Sur","Suecia","Suiza","Surinam","Tailandia","Tanzania","Tayikistán","Timor Oriental","Togo","Tonga",
         "Trinidad y Tobago","Túnez","Turkmenistán","Turquía","Tuvalu","Ucrania","Uganda","Uruguay","Uzbekistán","Vanuatu","Venezuela","Vietnam","Yemen","Yibuti","Zambia","Zimbabue","Palestina","Ciudad del Vaticano (Santa Sede)"	
     ],
+
     "centros_por_rectoria": {
         "Antioquia - Chocó": 
         ["Apartadó","Bello","Centro  de Atención Tutorial Caucasia","Centro de Atención Tutorial El Bagre",
@@ -93,8 +96,8 @@ opciones = {
 
         "Bogotá Cundinamarca - Boyacá":
         ["Kennedy","Las Cruces - Santa Fe","Minuto de Dios - Engativá","Perdomo - Ciudad Bolívar",
-        "San Cristóbal Norte - Usaquén","Centro de Atención Tutorial Facatativá","Centro de Atención Tutorial Funza",                                     "Centro de Atención Tutorial Fusagasugá","Centro de Atención Tutorial La Mesa","Centro de Atención Tutorial Ubaté",
-        "Centro de Atención Tutorial Villeta","Chiquinquirá","Duitama","Girardot","Madrid","Soacha","Zipaquirá"],
+        "San Cristóbal Norte - Usaquén","Centro de Atención Tutorial Facatativá","Centro de Atención Tutorial Funza","Centro de Atención Tutorial Fusagasugá","Centro de Atención Tutorial La Mesa",
+        "Centro de Atención Tutorial Ubaté","Centro de Atención Tutorial Villeta","Chiquinquirá","Duitama","Girardot","Madrid","Soacha","Zipaquirá"],
 
         "Caribe": 
         ["Barranquilla", "Cartagena", "Santa Marta","Centro de Atención Tutorial Magangué"],
