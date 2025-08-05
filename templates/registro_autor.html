@@ -50,8 +50,12 @@
         </label><br>
 
         <label>Filiación: <input type="text" name="filiacion"></label><br>
-        <label>País filiación: <input type="text" name="pais_filiacion"></label><br>
-
+        <label>País filiación 
+            <select name="pais_filiacion">
+                {% for pais_filiacion in opciones.pais_filiacion %}
+                <option value="{{ pais_filiacion }}"> {{ pais_filiacion}}</option>
+                {% endfor %}
+        </label><br>
         <label>¿Es investigador?:
             <select name="es_investigador">
                 {% for opcion in opciones.es_investigador %}
@@ -60,7 +64,7 @@
             </select>
         </label><br>
 
-        <label>Rectoría:
+        <label>SEDE:
             <select name="rectoria">
                 {% for r in opciones.rectorias %}
                     <option value="{{ r }}">{{ r }}</option>
