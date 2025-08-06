@@ -168,6 +168,7 @@ with app.app_context():
 def index():
     return redirect("/tipo_obra")
 
+
 @app.route("/tipo_obra", methods=["GET", "POST"])
 def tipo_obra():
     if request.method == "POST":
@@ -176,13 +177,13 @@ def tipo_obra():
         session['tipo_obra'] = tipo
 
         if tipo == "obra_capitulo":
-            return redirect("/obra_info")  # Va primero a la info de la obra
+            return redirect("/obra_info")
         elif tipo == "obra_completa":
-            return redirect("/registro")   # Va directo a registrar autores
+            return redirect("/registro")
         else:
-            return redirect("/tipo_obra")  # fallback en caso de error
-
+            return redirect("/tipo_obra")
     return render_template("tipo_obra.html")
+
 
 @app.route("/registro", methods=["GET", "POST"])
 def registro_autor():
@@ -241,10 +242,12 @@ def registro_capitulo(obra_id):
     return render_template('registro_capitulo.html', obra_id=obra_id)
 
 
+
 @app.route("/obra_info", methods=["GET", "POST"])
 def obra_info():
     if request.method == "POST":
         datos = request.form
+        tipo = session.get("tipo_obra")
 
         nueva_obra = Obra(
             titulo_tentativo=datos.get("titulo_tentativo"),
@@ -257,7 +260,7 @@ def obra_info():
             resumen=datos.get("resumen"),
             publico_objetivo=datos.get("publico_objetivo"),
             presupuesto=datos.get("presupuesto"),
-            tipo=session.get("tipo_obra")  # desde la sesión
+            tipo=tipo
         )
         db.session.add(nueva_obra)
         db.session.commit()
@@ -269,9 +272,12 @@ def obra_info():
 
         db.session.commit()
 
-        return redirect("/confirmacion")
-
+        if tipo == "obra_capitulo":
+            return redirect(url_for('registro_capitulo', obra_id=nueva_obra.id))
+        else:
+            return redirect("/confirmacion")
     return render_template("obra_info.html", autores=session.get("autores", []))
+
 
 @app.route("/confirmacion")
 def confirmacion():
