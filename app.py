@@ -25,6 +25,7 @@ class Autor(db.Model):
     centro_universitario = db.Column(db.String(100))
     facultad = db.Column(db.String(100))
     programa = db.Column(db.String(100))
+    huella_digital = db.Column(db.String(300))
 
 # Diccionario de opciones para el formulario
 opciones = {
@@ -156,7 +157,8 @@ def registro_autor():
             rectoria=datos.get("rectoria"),
             centro_universitario=datos.get("centro_universitario"),
             facultad=datos.get("facultad"),
-            programa=datos.get("programa")
+            programa=datos.get("programa"),
+            huella_digital=datos.get("huella_digital")
         )
 
         db.session.add(nuevo_autor)
