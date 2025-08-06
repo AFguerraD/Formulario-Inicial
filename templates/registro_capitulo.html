@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Información de la Obra</title>
+    <title>Título del Capítulo</title>
     <style>
         body {
             background-color: #f4f6f9;
@@ -19,15 +19,15 @@
             padding: 40px;
             border-radius: 16px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-            max-width: 600px;
+            max-width: 500px;
             width: 100%;
         }
 
         h1 {
             text-align: center;
             color: #2c3e50;
-            margin-bottom: 30px;
-            font-size: 24px;
+            margin-bottom: 25px;
+            font-size: 22px;
         }
 
         label {
@@ -51,7 +51,7 @@
             margin-top: 25px;
             width: 100%;
             padding: 12px;
-            background-color: #3498db;
+            background-color: #27ae60;
             color: white;
             border: none;
             font-size: 16px;
@@ -61,45 +61,18 @@
         }
 
         button:hover {
-            background-color: #2980b9;
+            background-color: #1e8449;
         }
     </style>
 </head>
 <body>
     <div class="form-container">
-        <h1>Registro de la Obra Completa</h1>
+        <h1>Registro de Capítulo</h1>
         <form method="POST">
-            <label>Título Tentativo:</label>
-            <input type="text" name="titulo_tentativo" required>
+            <label for="titulo_capitulo">Título del capítulo:</label>
+            <input type="text" id="titulo_capitulo" name="titulo_capitulo" required>
 
-            <label>Origen de la Obra:</label>
-            <input type="text" name="origen" required>
-
-            <label>Línea Editorial:</label>
-            <input type="text" name="linea_editorial" required>
-
-            <label>Tipología:</label>
-            <input type="text" name="tipologia" required>
-
-            <label>Área de Conocimiento:</label>
-            <input type="text" name="area_conocimiento" required>
-
-            <label>Thema:</label>
-            <input type="text" name="thema" required>
-
-            <label>ODS al que aporta:</label>
-            <input type="text" name="ods" required>
-
-            <label>Resumen (máx. 60 caracteres):</label>
-            <input type="text" name="resumen" maxlength="60" required>
-
-            <label>Público Objetivo:</label>
-            <input type="text" name="publico_objetivo" required>
-
-            <label>Presupuesto:</label>
-            <input type="text" name="presupuesto" required>
-
-            <button type="submit">Guardar Obra</button>
+            <button type="submit">Siguiente</button>
         </form>
     </div>
 </body>

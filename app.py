@@ -15,7 +15,6 @@ migrate = Migrate(app, db)
 # MODELO
 class Autor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    obra_id = db.Column(db.Integer, db.ForeignKey('obra.id'))
     documento = db.Column(db.String(100))
     nombre_autor = db.Column(db.String(100))
     sexo = db.Column(db.String(20))
@@ -32,6 +31,8 @@ class Autor(db.Model):
     facultad = db.Column(db.String(100))
     programa = db.Column(db.String(100))
     huella_digital = db.Column(db.String(300))
+    obra_id = db.Column(db.Integer, db.ForeignKey('obra.id'))
+    capitulo_id = db.Column(db.Integer, db.ForeignKey('capitulo.id'))
 
 class Obra(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -49,6 +50,14 @@ class Obra(db.Model):
 
  # Relación con autores
     autores = db.relationship('Autor', backref='obra', lazy=True)
+
+class Capitulo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    titulo_capitulo = db.Column(db.String(200))
+    obra_id = db.Column(db.Integer, db.ForeignKey('obra.id'))
+
+    # Relación con autores
+    autores = db.relationship('Autor', backref='capitulo', lazy=True)
 
 # Diccionario de opciones para el formulario
 opciones = {
@@ -207,6 +216,24 @@ def registro_autor():
 
     return render_template("registro_autor.html", opciones=opciones)
 
+@app.route('/registro-capitulo/<int:obra_id>', methods=['GET', 'POST'])
+def registro_capitulo(obra_id):
+    if request.method == 'POST':
+        titulo_capitulo = request.form['titulo_capitulo']
+        
+        nuevo_capitulo = Capitulo(
+            titulo_capitulo=titulo_capitulo,
+            obra_id=obra_id
+        )
+        db.session.add(nuevo_capitulo)
+        db.session.commit()
+
+        # Redirige al formulario de autores para ese capítulo
+        return redirect(url_for('registro_autor_capitulo', capitulo_id=nuevo_capitulo.id))
+    
+    return render_template('registro_capitulo.html', obra_id=obra_id)
+
+
 @app.route("/obra_info", methods=["GET", "POST"])
 def obra_info():
     if request.method == "POST":
@@ -243,42 +270,99 @@ def obra_info():
 def confirmacion():
     return "<h2>✅ Obra registrada correctamente con sus autores.</h2>"
 
+@app.route('/registro-autor-capitulo/<int:capitulo_id>', methods=['GET', 'POST'])
+def registro_autor_capitulo(capitulo_id):
+    if request.method == "POST":
+        datos = request.form
+
+        nuevo_autor = Autor(
+            documento=datos.get("documento"),
+            nombre_autor=datos.get("nombre_autor"),
+            sexo=datos.get("sexo"),
+            perfil=datos.get("perfil"),
+            rol_obra=datos.get("rol_obra"),
+            nacionalidad=datos.get("nacionalidad"),
+            correo=datos.get("correo"),
+            nivel_formacion=datos.get("nivel_formacion"),
+            filiacion=datos.get("filiacion"),
+            pais_filiacion=datos.get("pais_filiacion"),
+            es_investigador=datos.get("es_investigador"),
+            rectoria=datos.get("rectoria"),
+            centro_universitario=datos.get("centro_universitario"),
+            facultad=datos.get("facultad"),
+            programa=datos.get("programa"),
+            huella_digital=datos.get("huella_digital"),
+            capitulo_id=capitulo_id
+        )
+        db.session.add(nuevo_autor)
+        db.session.commit()
+
+        autor_guardado = {
+            "nombre_autor": nuevo_autor.nombre_autor,
+            "rol_obra": nuevo_autor.rol_obra
+        }
+        session.setdefault('autores_capitulo', []).append(autor_guardado)
+        session.modified = True
+
+        if 'registrar_otro' in request.form:
+            return redirect(url_for('registro_autor_capitulo', capitulo_id=capitulo_id))
+        elif 'finalizar' in request.form:
+            capitulo = Capitulo.query.get_or_404(capitulo_id)
+            return redirect(url_for('capitulo_confirmacion', obra_id=capitulo.obra_id))
+
+    return render_template("registro_autor_capitulo.html", opciones=opciones)
+
+@app.route('/capitulo_confirmacion/<int:obra_id>', methods=['GET', 'POST'])
+def capitulo_confirmacion(obra_id):
+    if request.method == "POST":
+        accion = request.form.get("accion")
+        if accion == "agregar":
+            return redirect(url_for('registro_capitulo', obra_id=obra_id))
+        else:
+            return redirect("/confirmacion")
+    return render_template("capitulo_confirmacion.html", obra_id=obra_id)
+
+
 
 @app.route("/descargar_excel")
 def descargar_excel():
-    autores = Autor.query.all()
-    datos = [{
-        "Documento": a.documento,
-        "Nombre autor": a.nombre_autor,
-        "Sexo": a.sexo,
-        "Perfil": a.perfil,
-        "Rol en la obra": a.rol_obra,
-        "Nacionalidad": a.nacionalidad,
-        "Correo": a.correo,
-        "Nivel de formación": a.nivel_formacion,
-        "Filiación": a.filiacion,
-        "País filiación": a.pais_filiacion,
-        "¿Es investigador?": a.es_investigador,
-        "Rectoría": a.rectoria,
-        "Centro universitario": a.centro_universitario,
-        "Facultad": a.facultad,
-        "Programa académico": a.programa,
-        "Huella Digital": a.huella_digital
-    } for a in autores]
+    autores = Autor.query.outerjoin(Obra).outerjoin(Capitulo).all()  # outerjoin para que no falle si falta alguno
+
+    datos = []
+    for a in autores:
+        datos.append({
+            "Documento": a.documento,
+            "Nombre del autor": a.nombre_autor,
+            "Rol en la obra": a.rol_obra,
+            "Correo": a.correo,
+            "Programa": a.programa,
+            "Huella Digital": a.huella_digital,
+            "Título Tentativo": a.obra.titulo_tentativo if a.obra else "",
+            "Origen de la obra": a.obra.origen if a.obra else "",
+            "Línea editorial": a.obra.linea_editorial if a.obra else "",
+            "Tipología": a.obra.tipologia if a.obra else "",
+            "Área de conocimiento": a.obra.area_conocimiento if a.obra else "",
+            "Thema": a.obra.thema if a.obra else "",
+            "ODS al que aporta": a.obra.ods if a.obra else "",
+            "Resumen": a.obra.resumen if a.obra else "",
+            "Público objetivo": a.obra.publico_objetivo if a.obra else "",
+            "Presupuesto": a.obra.presupuesto if a.obra else "",
+            "Tipo de obra": a.obra.tipo if a.obra else "",
+            "Título del capítulo": a.capitulo.titulo_capitulo if a.capitulo else ""
+        })
 
     df = pd.DataFrame(datos)
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        df.to_excel(writer, index=False, sheet_name="Autores")
+        df.to_excel(writer, index=False, sheet_name="Autores y Obras")
 
     output.seek(0)
     return send_file(
         output,
-        download_name="Autores_Registrados.xlsx",
+        download_name="Autores_y_Obras.xlsx",
         as_attachment=True,
         mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     )
-
 
 if __name__ == "__main__":
     app.run(debug=True)

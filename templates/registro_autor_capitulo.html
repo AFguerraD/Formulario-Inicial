@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Autor para Capítulo</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Registro de Autor - Capítulo</h1>
+    <form method="post">
+        <label>Documento:</label>
+        <input type="text" name="documento" required><br>
+
+        <label>Nombre del autor:</label>
+        <input type="text" name="nombre_autor" required><br>
+
+        <label>Huella Digital: <input type="text" name="huella_digital"></label><br>
+        <label>Sexo:</label>
+        <select name="sexo" required>
+            {% for sexo in opciones.sexos %}
+            <option value="{{ sexo }}">{{ sexo }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Perfil institucional:</label>
+        <select name="perfil" required>
+            {% for perfil in opciones.perfiles_institucionales %}
+            <option value="{{ perfil }}">{{ perfil }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Rol en la obra:</label>
+        <select name="rol_obra" required>
+            {% for rol in opciones.rol_obra %}
+            <option value="{{ rol }}">{{ rol }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Nacionalidad:</label>
+        <select name="nacionalidad" required>
+            {% for pais in opciones.nacionalidades %}
+            <option value="{{ pais }}">{{ pais }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Correo electrónico:</label>
+        <input type="email" name="correo" required><br>
+
+        <label>Nivel de formación:</label>
+        <select name="nivel_formacion" required>
+            {% for nivel in opciones.niveles_formacion %}
+            <option value="{{ nivel }}">{{ nivel }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Filiación:</label>
+        <input type="text" name="filiacion" required><br>
+
+        <label>País de filiación:</label>
+        <select name="pais_filiacion" required>
+            {% for pais in opciones.pais_filiacion %}
+            <option value="{{ pais }}">{{ pais }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>¿Es investigador?</label>
+        <select name="es_investigador" required>
+            {% for opcion in opciones.es_investigador %}
+            <option value="{{ opcion }}">{{ opcion }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Rectoría:</label>
+        <select name="rectoria" id="rectoria" required onchange="actualizarCentros()">
+            {% for rectoria in opciones.rectorias %}
+            <option value="{{ rectoria }}">{{ rectoria }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Centro universitario:</label>
+        <select name="centro_universitario" id="centro_universitario" required>
+            <option value="">-Seleccione una rectoría primero-</option>
+        </select><br>
+
+        <label>Facultad:</label>
+        <select name="facultad" required>
+            {% for facultad in opciones.facultades %}
+            <option value="{{ facultad }}">{{ facultad }}</option>
+            {% endfor %}
+        </select><br>
+
+        <label>Programa académico:</label>
+        <input type="text" name="programa" required><br><br>
+
+        <button type="submit" name="registrar_otro">¿Desea registrar otro autor?</button>
+        <button type="submit" name="siguiente">Siguiente</button>
+    </form>
+
+    <script>
+        const centrosPorRectoria = {{ opciones.centros_por_rectoria | tojson }};
+        const centroSelect = document.getElementById("centro_universitario");
+        const rectoriaSelect = document.getElementById("rectoria");
+
+        function actualizarCentros() {
+            const rectoria = rectoriaSelect.value;
+            const centros = centrosPorRectoria[rectoria] || [];
+
+            centroSelect.innerHTML = "";
+
+            if (centros.length === 0) {
+                centroSelect.innerHTML = '<option value="">-Sin centros disponibles-</option>';
+                return;
+            }
+
+            centros.forEach(centro => {
+                const option = document.createElement("option");
+                option.value = centro;
+                option.textContent = centro;
+                centroSelect.appendChild(option);
+            });
+        }
+    </script>
+</body>
+</html>
