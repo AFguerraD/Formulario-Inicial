@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tipo de Obra</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form-container {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 22px;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        label.radio-button {
+            display: block;
+            padding: 15px;
+            border-radius: 6px;
+            background-color: #e4e4e4;
+            color: #333;
+            font-weight: 600;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        input[type="radio"]:checked + label.radio-button {
+            background-color: #007BFF;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        button {
+            margin-top: 30px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Desea registrar el libro como:</h1>
+        <form method="POST" action="/tipo_obra" class="radio-group">
+            <input type="radio" id="obra_completa" name="tipo" value="obra_completa" required>
+            <label for="obra_completa" class="radio-button">Obra completa</label>
+
+            <input type="radio" id="obra_capitulo" name="tipo" value="obra_capitulo">
+            <label for="obra_capitulo" class="radio-button">Obra por capítulo</label>
+            
+            <button type="submit">Continuar</button>
+        </form>
+    </div>
+</body>
+</html>

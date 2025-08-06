@@ -1,15 +1,21 @@
-from flask import Flask, request, render_template, redirect, send_file
+from flask import Flask, render_template, request, redirect, url_for, session, send_file
 from flask_sqlalchemy import SQLAlchemy
 import pandas as pd
 import io
+from flask_migrate import Migrate
+
 
 app = Flask(__name__)
+app.secret_key = "clave_secreta"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres.wjzabbdnwmsydegvwrep:FormAutores2025!@aws-0-us-east-2.pooler.supabase.com:5432/postgres?sslmode=require'
 db = SQLAlchemy(app)
 
-# Modelo Autor sin seudonimo
+migrate = Migrate(app, db)
+
+# MODELO
 class Autor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    obra_id = db.Column(db.Integer, db.ForeignKey('obra.id'))
     documento = db.Column(db.String(100))
     nombre_autor = db.Column(db.String(100))
     sexo = db.Column(db.String(20))
@@ -26,6 +32,23 @@ class Autor(db.Model):
     facultad = db.Column(db.String(100))
     programa = db.Column(db.String(100))
     huella_digital = db.Column(db.String(300))
+
+class Obra(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    titulo_tentativo = db.Column(db.String(200))
+    origen = db.Column(db.String(100))
+    linea_editorial = db.Column(db.String(100))
+    tipologia = db.Column(db.String(100))
+    area_conocimiento = db.Column(db.String(100))
+    thema = db.Column(db.String(100))
+    ods = db.Column(db.String(100))
+    resumen = db.Column(db.String(60))
+    publico_objetivo = db.Column(db.String(200))
+    presupuesto = db.Column(db.String(50))
+    tipo = db.Column(db.String(50))  # "Obra Completa" o "Capítulo"
+
+ # Relación con autores
+    autores = db.relationship('Autor', backref='obra', lazy=True)
 
 # Diccionario de opciones para el formulario
 opciones = {
@@ -131,17 +154,24 @@ opciones = {
 with app.app_context():
     db.create_all()
 
-# Redirigir a /registro
+# Rutas
 @app.route("/")
 def index():
-    return redirect("/registro")
+    return redirect("/tipo_obra")
 
-# Ruta de registro
+@app.route("/tipo_obra", methods=["GET", "POST"])
+def tipo_obra():
+    if request.method == "POST":
+        tipo = request.form.get("tipo")
+        session['autores'] = []
+        session['tipo_obra'] = tipo
+        return redirect("/registro")
+    return render_template("tipo_obra.html")
+
 @app.route("/registro", methods=["GET", "POST"])
 def registro_autor():
     if request.method == "POST":
         datos = request.form
-
         nuevo_autor = Autor(
             documento=datos.get("documento"),
             nombre_autor=datos.get("nombre_autor"),
@@ -160,25 +190,63 @@ def registro_autor():
             programa=datos.get("programa"),
             huella_digital=datos.get("huella_digital")
         )
-
         db.session.add(nuevo_autor)
         db.session.commit()
 
-        return "Formulario enviado y guardado en la base de datos ✅"
+        autor_guardado = {
+            "nombre_autor": nuevo_autor.nombre_autor,
+            "rol_obra": nuevo_autor.rol_obra
+        }
+        session['autores'].append(autor_guardado)
+        session.modified = True
+
+        if 'registrar_otro' in request.form:
+            return redirect("/registro")
+        elif 'siguiente' in request.form:
+            return redirect("/obra_info")
 
     return render_template("registro_autor.html", opciones=opciones)
 
-# Ver todos los autores
-@app.route("/autores")
-def ver_autores():
-    autores = Autor.query.all()
-    return render_template("lista_autores.html", autores=autores)
+@app.route("/obra_info", methods=["GET", "POST"])
+def obra_info():
+    if request.method == "POST":
+        datos = request.form
 
-# Descargar Excel
+        nueva_obra = Obra(
+            titulo_tentativo=datos.get("titulo_tentativo"),
+            origen=datos.get("origen"),
+            linea_editorial=datos.get("linea_editorial"),
+            tipologia=datos.get("tipologia"),
+            area_conocimiento=datos.get("area_conocimiento"),
+            thema=datos.get("thema"),
+            ods=datos.get("ods"),
+            resumen=datos.get("resumen"),
+            publico_objetivo=datos.get("publico_objetivo"),
+            presupuesto=datos.get("presupuesto"),
+            tipo=session.get("tipo_obra")  # desde la sesión
+        )
+        db.session.add(nueva_obra)
+        db.session.commit()
+
+        # Asociar autores a la obra
+        autores = Autor.query.order_by(Autor.id.desc()).limit(len(session.get("autores", []))).all()
+        for autor in autores:
+            autor.obra_id = nueva_obra.id
+
+        db.session.commit()
+
+        return redirect("/confirmacion")
+
+    return render_template("obra_info.html", autores=session.get("autores", []))
+
+@app.route("/confirmacion")
+def confirmacion():
+    return "<h2>✅ Obra registrada correctamente con sus autores.</h2>"
+
+
 @app.route("/descargar_excel")
 def descargar_excel():
     autores = Autor.query.all()
-
     datos = [{
         "Documento": a.documento,
         "Nombre autor": a.nombre_autor,
@@ -194,21 +262,23 @@ def descargar_excel():
         "Rectoría": a.rectoria,
         "Centro universitario": a.centro_universitario,
         "Facultad": a.facultad,
-        "Programa académico": a.programa
+        "Programa académico": a.programa,
+        "Huella Digital": a.huella_digital
     } for a in autores]
 
     df = pd.DataFrame(datos)
-
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name="Autores")
 
     output.seek(0)
+    return send_file(
+        output,
+        download_name="Autores_Registrados.xlsx",
+        as_attachment=True,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    )
 
-    return send_file(output,
-                     download_name="Autores_Registrados.xlsx",
-                     as_attachment=True,
-                     mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 if __name__ == "__main__":
     app.run(debug=True)
