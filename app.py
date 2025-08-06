@@ -174,7 +174,14 @@ def tipo_obra():
         tipo = request.form.get("tipo")
         session['autores'] = []
         session['tipo_obra'] = tipo
-        return redirect("/registro")
+
+        if tipo == "obra_capitulo":
+            return redirect("/obra_info")  # Va primero a la info de la obra
+        elif tipo == "obra_completa":
+            return redirect("/registro")   # Va directo a registrar autores
+        else:
+            return redirect("/tipo_obra")  # fallback en caso de error
+
     return render_template("tipo_obra.html")
 
 @app.route("/registro", methods=["GET", "POST"])
