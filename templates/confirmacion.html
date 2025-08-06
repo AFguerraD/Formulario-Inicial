@@ -74,28 +74,9 @@
   <div class="confirmacion-container">
     <img src="https://www.svgrepo.com/show/13671/check.svg" alt="Éxito" class="icono-check" />
 
-    <h2>Obra registrada correctamente con sus autores.</h2>
-    
-    {% if tipo == "obra_completa" %}
-      <p>Has registrado una <strong>obra completa</strong>.</p>
-    {% elif tipo == "obra_capitulo" %}
-      <p>Has registrado un <strong>capítulo de obra</strong>.</p>
-    {% endif %}
-
-    {% if autores %}
-      <p><strong>Autores registrados:</strong></p>
-      <ul>
-        {% for autor in autores %}
-          <li>{{ autor.nombre_autor }} — {{ autor.rol_obra }}</li>
-        {% endfor %}
-      </ul>
-    {% endif %}
-
     <div class="botones">
       <a href="/" class="btn">Registrar otra obra</a>
-      <a href="/descargar_excel" class="btn">📥 Descargar Excel</a>
     </div>
   </div>
 </body>
 </html>
-s
