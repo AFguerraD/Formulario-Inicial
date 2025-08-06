@@ -338,7 +338,7 @@ def capitulo_confirmacion(obra_id):
 
 @app.route("/confirmacion-capitulo")
 def confirmacion_capitulo():
-    return render_template("capitulo_confirmacion.html")
+    return render_template("confirmacion_capitulo_simple.html")
 
 @app.route("/descargar_excel")
 def descargar_excel():
