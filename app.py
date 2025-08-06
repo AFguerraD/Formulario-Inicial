@@ -278,10 +278,11 @@ def obra_info():
             return redirect("/confirmacion")
     return render_template("obra_info.html", autores=session.get("autores", []))
 
-
 @app.route("/confirmacion")
 def confirmacion():
-    return "<h2>✅ Obra registrada correctamente con sus autores.</h2>"
+    tipo = session.get("tipo_obra")
+    autores = session.get("autores", []) + session.get("autores_capitulo", [])
+    return render_template("confirmacion.html", tipo=tipo, autores=autores)
 
 @app.route('/registro-autor-capitulo/<int:capitulo_id>', methods=['GET', 'POST'])
 def registro_autor_capitulo(capitulo_id):
@@ -335,7 +336,9 @@ def capitulo_confirmacion(obra_id):
             return redirect("/confirmacion")
     return render_template("capitulo_confirmacion.html", obra_id=obra_id)
 
-
+@app.route("/confirmacion-capitulo")
+def confirmacion_capitulo():
+    return render_template("capitulo_confirmacion.html")
 
 @app.route("/descargar_excel")
 def descargar_excel():
